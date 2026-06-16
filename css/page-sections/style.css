@@ -1,0 +1,226 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #fff5f8;
+    color: #3b2630;
+}
+
+.contenedor {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.encabezado {
+    background: linear-gradient(135deg, #b85c8a, #6d2e46);
+    color: white;
+    text-align: center;
+    padding: 35px 20px;
+}
+
+.encabezado h1 {
+    margin: 0;
+    font-size: 42px;
+}
+
+.encabezado p {
+    margin: 10px 0 0;
+    font-size: 18px;
+}
+
+.seccion {
+    padding: 50px 0;
+}
+
+.presentacion {
+    background-color: #ffe6ef;
+}
+
+.presentacion-contenido {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 35px;
+}
+
+.texto-presentacion {
+    flex: 1;
+}
+
+.etiqueta {
+    font-weight: bold;
+    color: #9b3f68;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.texto-presentacion h2,
+.servicios h2,
+.cta h2 {
+    font-size: 32px;
+    margin: 10px 0;
+}
+
+.texto-presentacion p,
+.servicios p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.imagen-estetica {
+    width: 100%;
+    max-width: 430px;
+    border-radius: 18px;
+    display: block;
+}
+
+.servicios {
+    background-color: white;
+    text-align: center;
+}
+
+.servicios h3 {
+    margin-top: 30px;
+}
+
+.tarjetas {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: 20px;
+}
+
+.tarjeta {
+    background-color: #fff0f5;
+    padding: 22px;
+    border-radius: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.cta {
+    background-color: #f7c6d8;
+    text-align: center;
+}
+
+.cta-contenido {
+    background-color: white;
+    padding: 35px;
+    border-radius: 18px;
+}
+
+.botones {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.boton {
+    display: inline-block;
+    background-color: #9b3f68;
+    color: white;
+    padding: 14px 22px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.boton:hover {
+    background-color: #6d2e46;
+}
+
+.boton-secundario {
+    background-color: #3b2630;
+}
+
+.clase-victoria {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+    padding: 30px 15px;
+    margin: 0;
+}
+
+.pie {
+    background-color: #3b2630;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.pie p {
+    margin: 5px 0;
+}
+
+/* Tablets */
+@media (max-width: 900px) {
+    .presentacion-contenido {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .tarjetas {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .encabezado h1 {
+        font-size: 36px;
+    }
+}
+
+/* Celulares */
+@media (max-width: 600px) {
+    .contenedor {
+        width: 92%;
+    }
+
+    .encabezado {
+        padding: 28px 15px;
+    }
+
+    .encabezado h1 {
+        font-size: 30px;
+    }
+
+    .encabezado p {
+        font-size: 16px;
+    }
+
+    .seccion {
+        padding: 35px 0;
+    }
+
+    .texto-presentacion h2,
+    .servicios h2,
+    .cta h2 {
+        font-size: 25px;
+    }
+
+    .texto-presentacion p,
+    .servicios p {
+        font-size: 16px;
+    }
+
+    .tarjetas {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-contenido {
+        padding: 25px 18px;
+    }
+
+    .boton {
+        width: 100%;
+        text-align: center;
+    }
+
+    .imagen-estetica {
+        max-width: 100%;
+    }
+}
