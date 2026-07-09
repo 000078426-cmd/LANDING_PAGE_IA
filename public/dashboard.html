@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Estética Victoria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .dashboard {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            font-family: 'Manrope', sans-serif;
+            margin-bottom: 30px;
+            font-size: 20px;
+        }
+
+        .sidebar nav a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: background 0.3s;
+        }
+
+        .sidebar nav a:hover,
+        .sidebar nav a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-footer {
+            position: absolute;
+            bottom: 20px;
+            width: calc(100% - 40px);
+        }
+
+        .user-info {
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .user-info p {
+            margin: 4px 0;
+        }
+
+        .btn-logout {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: 250px;
+            flex: 1;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-family: 'Manrope', sans-serif;
+            font-size: 28px;
+        }
+
+        .header .date {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab {
+            padding: 8px 16px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* CARDS */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .card .value {
+            font-family: 'Manrope', sans-serif;
+            font-size: 32px;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        /* TABLES */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f9f9f9;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            transition: all 0.3s;
+            margin-right: 5px;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #ddd;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #ccc;
+        }
+
+        .btn-danger {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #ff5252;
+        }
+
+        /* FORMULARIO */
+        .form-container {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .alert.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .alert.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 200px;
+                padding: 15px;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            td, th {
+                padding: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                margin-bottom: 20px;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            position: relative;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <h2>Estética Victoria</h2>
+            <nav>
+                <a href="#" class="nav-link active" data-tab="resumen">📊 Resumen</a>
+                <a href="#" class="nav-link" data-tab="ventas">💰 Ventas</a>
+                <a href="#" class="nav-link" data-tab="usuarios">👥 Usuarios</a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <p><strong id="userName">Admin</strong></p>
+                    <p id="userEmail">admin@esteticavictoria.com</p>
+                </div>
+                <button class="btn-logout" onclick="cerrarSesion()">Cerrar sesión</button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <div class="header">
+                <h1>Dashboard Admin</h1>
+                <div class="date" id="currentDate"></div>
+            </div>
+
+            <div id="alertMessage"></div>
+
+            <!-- TAB: RESUMEN -->
+            <div id="resumen" class="tab-content active">
+                <div class="cards-grid">
+                    <div class="card">
+                        <h3>Ventas hoy</h3>
+                        <div class="value" id="ventasHoy">$0</div>
+                    </div>
+                    <div class="card">
+                        <h3>Transacciones hoy</h3>
+                        <div class="value" id="transaccionesHoy">0</div>
+                    </div>
+                    <div class="card">
+                        <h3>Ventas este mes</h3>
+                        <div class="value" id="ventasMes">$0</div>
+                    </div>
+                    <div class="card">
+                        <h3>Total usuarios</h3>
+                        <div class="value" id="totalUsuarios">0</div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="chartVentas"></canvas>
+                </div>
+            </div>
+
+            <!-- TAB: VENTAS -->
+            <div id="ventas" class="tab-content" style="display: none;">
+                <div class="tabs">
+                    <button class="tab active" onclick="filtrarVentas('diarias')">Ventas diarias</button>
+                    <button class="tab" onclick="filtrarVentas('rango')">Por rango de fechas</button>
+                </div>
+
+                <div id="filtrosVentas" style="background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; display: none;">
+                    <div class="form-group" style="max-width: 300px;">
+                        <label>Selecciona un rango de fechas</label>
+                        <input type="date" id="fechaInicio" value="">
+                        <input type="date" id="fechaFin" value="">
+                        <button class="btn btn-primary" onclick="cargarVentasRango()">Filtrar</button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Servicio</th>
+                                <th>Cliente</th>
+                                <th>Monto</th>
+                                <th>Estado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablasVentas">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB: USUARIOS -->
+            <div id="usuarios" class="tab-content" style="display: none;">
+                <div class="tabs">
+                    <button class="btn btn-primary" onclick="mostrarFormularioUsuario('nuevo')">+ Nuevo usuario</button>
+                </div>
+
+                <div id="formUsuario" class="form-container">
+                    <h3>Formulario de usuario</h3>
+                    <div class="form-group">
+                        <label>Nombre</label>
+                        <input type="text" id="usuarioNombre" placeholder="Nombre completo">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="usuarioEmail" placeholder="email@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="usuarioContraseña" placeholder="Dejar vacío para no cambiar">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo de usuario</label>
+                        <select id="usuarioTipo">
+                            <option value="user">Usuario</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado</label>
+                        <select id="usuarioEstado">
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn-secondary" onclick="cancelarFormulario()">Cancelar</button>
+                        <button class="btn btn-primary" onclick="guardarUsuario()">Guardar</button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Tipo</th>
+                                <th>Estado</th>
+                                <th>Fecha registro</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablasUsuarios">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const apiUrl = '../php/api';
+        let usuarioEditando = null;
+        let chart = null;
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-MX', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            // Cargar datos iniciales
+            cargarResumen();
+            cargarUsuarios();
+            cargarVentasDiarias();
+
+            // Event listeners para tabs
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    cambiarTab(this.dataset.tab);
+                });
+            });
+        });
+
+        function cambiarTab(tabName) {
+            // Actualizar nav activo
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+
+            // Actualizar contenido
+            document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+            document.getElementById(tabName).style.display = 'block';
+
+            if (tabName === 'resumen') {
+                cargarResumen();
+            }
+        }
+
+        // RESUMEN
+        function cargarResumen() {
+            const hoy = new Date().toISOString().split('T')[0];
+
+            // Ventas del día
+            fetch(`${apiUrl}/ventas.php?accion=diarias&fecha=${hoy}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.suceso && data.datos) {
+                        document.getElementById('ventasHoy').textContent = `$${parseFloat(data.datos.total_ventas || 0).toFixed(2)}`;
+                        document.getElementById('transaccionesHoy').textContent = data.datos.cantidad_ventas || 0;
+                    }
+                });
+
+            // Ventas del mes
+            fetch(`${apiUrl}/ventas.php?accion=mes`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.suceso && data.datos) {
+                        document.getElementById('ventasMes').textContent = `$${parseFloat(data.datos.total_mes || 0).toFixed(2)}`;
+                    }
+                });
+
+            // Total usuarios
+            fetch(`${apiUrl}/usuarios.php?accion=listar`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.suceso && data.datos) {
+                        document.getElementById('totalUsuarios').textContent = data.datos.length;
+                    }
+                });
+
+            // Gráfico de últimas 7 días
+            const hace7Dias = new Date();
+            hace7Dias.setDate(hace7Dias.getDate() - 7);
+            const fechaInicio = hace7Dias.toISOString().split('T')[0];
+            const fechaFin = hoy;
+
+            fetch(`${apiUrl}/ventas.php?accion=rango&fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.suceso && data.datos) {
+                        dibujarGraficoVentas(data.datos);
+                    }
+                });
+        }
+
+        function dibujarGraficoVentas(datos) {
+            const ctx = document.getElementById('chartVentas');
+            
+            const labels = datos.map(d => d.fecha).reverse();
+            const values = datos.map(d => parseFloat(d.total_ventas || 0)).reverse();
+
+            if (chart) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Ventas',
+                        data: values,
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    return '$' + value;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // VENTAS
+        function cargarVentasDiarias() {
+            const hoy = new Date().toISOString().split('T')[0];
+            fetch(`${apiUrl}/ventas.php?accion=diarias&fecha=${hoy}`)
+                .then(r => r.json())
+                .then(data => {
+                    mostrarTablaVentas([]);
+                });
+        }
+
+        function filtrarVentas(tipo) {
+            document.querySelectorAll('#ventas .tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if (tipo === 'rango') {
+                document.getElementById('filtrosVentas').style.display = 'block';
+            } else {
+                document.getElementById('filtrosVentas').style.display = 'none';
+                cargarVentasDiarias();
+            }
+        }
+
+        function cargarVentasRango() {
+            const fechaInicio = document.getElementById('fechaInicio').value;
+            const fechaFin = document.getElementById('fechaFin').value;
+
+            if (!fechaInicio || !fechaFin) {
+                mostrarAlerta('Por favor selecciona ambas fechas', 'error');
+                return;
+            }
+
+            fetch(`${apiUrl}/ventas.php?accion=rango&fecha_inicio=${fechaInicio}&fecha_fin=${fechaFin}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.suceso) {
+                        mostrarTablaVentas(data.datos);
+                    }
+                });
+        }
+
+        function mostrarTablaVentas(ventas) {
+            const tbody = document.getElementById('tablasVentas');
+            tbody.innerHTML = '';
+
+            if (ventas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">No hay ventas</td></tr>';
+                return;
+            }
+
+            ventas.forEach(venta => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${new Date(venta.fecha_venta).toLocaleDateString()}</td>
+                    <td>${venta.servicio}</td>
+                    <td>${venta.usuario_nombre || 'N/A'}</td>
+                    <td>$${parseFloat(venta.monto).toFixed(2)}</td>
+                    <td>${venta.estado}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // USUARIOS
+        function cargarUsuarios() {
+            fetch(`${apiUrl}/usuarios.php?accion=listar`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.suceso) {
+                        mostrarTablaUsuarios(data.datos);
+                    }
+                });
+        }
+
+        function mostrarTablaUsuarios(usuarios) {
+            const tbody = document.getElementById('tablasUsuarios');
+            tbody.innerHTML = '';
+
+            usuarios.forEach(usuario => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${usuario.nombre}</td>
+                    <td>${usuario.email}</td>
+                    <td>${usuario.tipo_usuario}</td>
+                    <td>${usuario.estado}</td>
+                    <td>${new Date(usuario.fecha_registro).toLocaleDateString()}</td>
+                    <td>
+                        <button class="btn btn-secondary" onclick="editarUsuario(${usuario.id})">Editar</button>
+                        <button class="btn btn-danger" onclick="eliminarUsuario(${usuario.id})">Eliminar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function mostrarFormularioUsuario(modo) {
+            document.getElementById('formUsuario').classList.add('active');
+            if (modo === 'nuevo') {
+                usuarioEditando = null;
+                document.getElementById('usuarioNombre').value = '';
+                document.getElementById('usuarioEmail').value = '';
+                document.getElementById('usuarioContraseña').value = '';
+                document.getElementById('usuarioTipo').value = 'user';
+                document.getElementById('usuarioEstado').value = 'activo';
+            }
+        }
+
+        function editarUsuario(id) {
+            fetch(`${apiUrl}/usuarios.php?accion=obtener&id=${id}`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.suceso) {
+                        const usuario = data.datos;
+                        usuarioEditando = id;
+                        document.getElementById('usuarioNombre').value = usuario.nombre;
+                        document.getElementById('usuarioEmail').value = usuario.email;
+                        document.getElementById('usuarioTipo').value = usuario.tipo_usuario;
+                        document.getElementById('usuarioEstado').value = usuario.estado;
+                        document.getElementById('usuarioContraseña').value = '';
+                        document.getElementById('formUsuario').classList.add('active');
+                    }
+                });
+        }
+
+        function guardarUsuario() {
+            const nombre = document.getElementById('usuarioNombre').value.trim();
+            const email = document.getElementById('usuarioEmail').value.trim();
+            const contraseña = document.getElementById('usuarioContraseña').value;
+            const tipo = document.getElementById('usuarioTipo').value;
+            const estado = document.getElementById('usuarioEstado').value;
+
+            if (!nombre || !email) {
+                mostrarAlerta('Completa todos los campos', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('nombre', nombre);
+            formData.append('email', email);
+            formData.append('tipo_usuario', tipo);
+            formData.append('estado', estado);
+            if (contraseña) formData.append('contraseña', contraseña);
+
+            const accion = usuarioEditando ? 'actualizar' : 'crear';
+            if (usuarioEditando) formData.append('id', usuarioEditando);
+
+            fetch(`${apiUrl}/usuarios.php?accion=${accion}`, {
+                method: 'POST',
+                body: formData
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.suceso) {
+                        mostrarAlerta(data.mensaje, 'success');
+                        cancelarFormulario();
+                        cargarUsuarios();
+                    } else {
+                        mostrarAlerta(data.error, 'error');
+                    }
+                });
+        }
+
+        function cancelarFormulario() {
+            document.getElementById('formUsuario').classList.remove('active');
+            usuarioEditando = null;
+        }
+
+        function eliminarUsuario(id) {
+            if (!confirm('¿Estás seguro de que deseas eliminar este usuario?')) return;
+
+            const formData = new FormData();
+            formData.append('id', id);
+
+            fetch(`${apiUrl}/usuarios.php?accion=eliminar`, {
+                method: 'POST',
+                body: formData
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.suceso) {
+                        mostrarAlerta(data.mensaje, 'success');
+                        cargarUsuarios();
+                    } else {
+                        mostrarAlerta(data.error, 'error');
+                    }
+                });
+        }
+
+        // UTILIDADES
+        function mostrarAlerta(mensaje, tipo) {
+            const div = document.getElementById('alertMessage');
+            div.className = `alert ${tipo}`;
+            div.textContent = mensaje;
+            setTimeout(() => {
+                div.style.display = 'none';
+            }, 5000);
+        }
+
+        function cerrarSesion() {
+            if (confirm('¿Cerrar sesión?')) {
+                window.location.href = '../php/auth/logout.php';
+            }
+        }
+
+        // Cargar nombre de usuario
+        function cargarDatosUsuario() {
+            fetch(`${apiUrl}/usuarios.php?accion=listar`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.suceso && data.datos.length > 0) {
+                        const admin = data.datos.find(u => u.tipo_usuario === 'admin');
+                        if (admin) {
+                            document.getElementById('userName').textContent = admin.nombre;
+                            document.getElementById('userEmail').textContent = admin.email;
+                        }
+                    }
+                });
+        }
+
+        cargarDatosUsuario();
+    </script>
+</body>
+</html>

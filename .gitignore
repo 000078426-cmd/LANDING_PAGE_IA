@@ -1,0 +1,29 @@
+# Archivos de entorno
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dependencias
+vendor/
+node_modules/
+composer.lock
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Variables sensibles
+config/local.php
+
+# Caché
+__pycache__/
+*.pyc

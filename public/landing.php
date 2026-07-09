@@ -1,0 +1,159 @@
+<?php
+require_once '../php/auth/session.php';
+
+// Verificar autenticación
+requiereAutenticacion();
+
+// Obtener datos del usuario
+$usuario = obtenerUsuarioActual();
+?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Estética Victoria ofrece cortes, uñas, maquillaje y tratamientos pensados para estudiantes. Agenda tu cita por WhatsApp y luce tu mejor versión entre clases.">
+  <title>Estética Victoria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/page-sections/style.css">
+  <style>
+    .user-greeting {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: rgba(102, 126, 234, 0.1);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #667eea;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 100;
+    }
+
+    .user-greeting strong {
+      color: #667eea;
+    }
+
+    .btn-logout {
+      background: #ff6b6b;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: background 0.3s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-logout:hover {
+      background: #ff5252;
+    }
+
+    .site-header {
+      position: relative;
+    }
+  </style>
+</head>
+<body id="top">
+  <!-- SALUDO DEL USUARIO -->
+  <div class="user-greeting">
+    <span>¡Hola, <strong><?php echo htmlspecialchars($usuario['nombre']); ?></strong>!</span>
+    <button class="btn-logout" onclick="cerrarSesion()">Salir</button>
+  </div>
+
+  <header class="site-header">
+    <div class="contenedor header-inner">
+      <a class="brand" href="#top">Estética Victoria</a>
+      <nav class="nav-links" aria-label="Enlaces principales">
+        <a href="#servicios">Servicios</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
+      <a class="boton boton-principal nav-action" href="https://wa.me/527774069564?text=Hola,%20quiero%20agendar%20una%20cita">Agendar</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero seccion">
+      <div class="contenedor hero-grid">
+        <div class="hero-copy">
+          <p class="hero-eyebrow">Belleza que se adapta a tu ritmo</p>
+          <h1>Tu mejor versión, entre clases y planes</h1>
+          <p class="hero-text">Cortes, uñas, maquillaje y tratamientos pensados para estudiantes que quieren verse increíbles sin complicarse la semana.</p>
+          <div class="hero-actions">
+            <a class="boton boton-principal" href="https://wa.me/527774069564?text=Hola,%20quiero%20agendar%20una%20cita">Agendar por WhatsApp</a>
+            <a class="boton boton-secundario" href="#servicios">Ver servicios</a>
+          </div>
+          <p class="hero-note">Atención personalizada · Citas fáciles · Estilo a tu manera</p>
+        </div>
+        <div class="hero-media">
+          <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1400&q=85"
+               alt="Joven mostrando su cabello en una estética moderna"
+               loading="eager"
+               decoding="async"
+               fetchpriority="high">
+        </div>
+      </div>
+    </section>
+
+    <section id="servicios" class="servicios seccion">
+      <div class="contenedor">
+        <div class="section-heading">
+          <h2>Servicios para tu ritmo universitario</h2>
+          <p>Tratamientos pensados para personas que buscan verse bien sin salir de su rutina.</p>
+        </div>
+        <div class="service-grid">
+          <article class="service-card">
+            <h3>Cortes de cabello</h3>
+            <p>Estilo fresco y práctico para cada semana.</p>
+          </article>
+          <article class="service-card">
+            <h3>Uñas y manicure</h3>
+            <p>Diseños delicados y duraderos para tu agenda personal.</p>
+          </article>
+          <article class="service-card">
+            <h3>Maquillaje profesional</h3>
+            <p>Look natural o de ocasión con un toque universitario.</p>
+          </article>
+          <article class="service-card">
+            <h3>Tratamientos capilares</h3>
+            <p>Cuidado profundo para cabello hidratado y manejable.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="contacto" class="cta seccion">
+      <div class="contenedor cta-card">
+        <div class="cta-copy">
+          <h2>Listo para tu cambio de look</h2>
+          <p>Reserva tu cita fácil por WhatsApp o envía tu duda por correo.</p>
+        </div>
+        <div class="cta-actions">
+          <a class="boton boton-principal" href="https://wa.me/527774069564?text=Hola,%20quiero%20agendar%20una%20cita">Continuar por WhatsApp</a>
+          <a class="boton boton-secundario" href="mailto:victorymeraz@gmail.com">Enviar correo</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="contenedor footer-inner">
+      <p>victorymeraz@gmail.com</p>
+      <p>Instagram: @esteticavictoria</p>
+    </div>
+  </footer>
+
+  <script>
+    function cerrarSesion() {
+      if (confirm('¿Cerrar sesión?')) {
+        window.location.href = '../php/auth/logout.php';
+      }
+    }
+  </script>
+</body>
+</html>
