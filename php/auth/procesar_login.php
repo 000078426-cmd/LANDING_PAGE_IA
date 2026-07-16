@@ -68,4 +68,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conexion->close();
     }
 }
+
+// Si hay error, redirigir a login con el mensaje
+if (isset($error)) {
+    header('Location: /login.html?error=' . urlencode($error));
+    exit;
+}
 ?>
