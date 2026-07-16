@@ -5,13 +5,13 @@
 
 // Iniciar sesión si no está iniciada
 if (session_status() === PHP_SESSION_NONE) {
+    ini_set('session.cookie_httponly', '1');
+    ini_set('session.cookie_secure', '1');
+    ini_set('session.use_strict_mode', '1');
+    ini_set('session.cookie_samesite', 'Lax');
+
     session_start();
 }
-
-// Configurar opciones de sesión seguras
-ini_set('session.cookie_httponly', 1);
-ini_set('session.cookie_secure', 1);
-ini_set('session.use_strict_mode', 1);
 
 // Regenerar ID de sesión para prevenir fixation
 function regenerarSesion() {
@@ -44,14 +44,14 @@ function obtenerUsuarioActual() {
 // Cerrar sesión
 function cerrarSesion() {
     session_destroy();
-    header('Location: index.php');
+    header('Location: /index.php');
     exit;
 }
 
 // Redirigir si no está autenticado
 function requiereAutenticacion() {
     if (!estaAutenticado()) {
-        header('Location: index.php');
+        header('Location: /index.php');
         exit;
     }
 }
@@ -59,7 +59,7 @@ function requiereAutenticacion() {
 // Redirigir si no es admin
 function requiereAdmin() {
     if (!esAdmin()) {
-        header('Location: landing.php');
+        header('Location: /landing.php');
         exit;
     }
 }
