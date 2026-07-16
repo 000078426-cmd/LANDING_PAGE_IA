@@ -9,9 +9,9 @@ require_once '../auth/session.php';
 // Si ya está autenticado, redirigir
 if (estaAutenticado()) {
     if (esAdmin()) {
-        header('Location: dashboard.php');
+        header('Location: /dashboard.html');
     } else {
-        header('Location: landing.php');
+        header('Location: /landing.php');
     }
     exit;
 }
@@ -52,9 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 // Redirigir según tipo de usuario
                 if ($usuario['tipo_usuario'] === 'admin') {
-                    header('Location: dashboard.php');
+                    header('Location: /dashboard.html');
                 } else {
-                    header('Location: landing.php');
+                    header('Location: /landing.php');
                 }
                 exit;
             } else {
