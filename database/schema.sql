@@ -66,6 +66,11 @@ CREATE TABLE reportes_diarios (
 INSERT INTO usuarios (nombre, email, contraseña, tipo_usuario) VALUES 
 ('Admin Victoria', 'admin@esteticavictoria.com', '$2y$10$abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 'admin');
 
+-- Insertar usuarios regulares
+INSERT INTO usuarios (nombre, email, contraseña, tipo_usuario) VALUES 
+('María García', 'maria.garcia@email.com', '$2y$10$eImiTXuWVxfaHNAVe8b/TO4r.zHzAb8J5LNSM3lToBy0EtW3qejva', 'user'),
+('Carlos López', 'carlos.lopez@email.com', '$2y$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcg7b3XeKeUxWdeS86E36gBSstC', 'user');
+
 -- Insertar servicios
 INSERT INTO servicios (nombre, descripcion, precio) VALUES 
 ('Corte de cabello', 'Corte profesional adaptado a tu estilo', 150.00),
