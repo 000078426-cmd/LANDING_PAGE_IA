@@ -3,25 +3,28 @@
 // CONFIGURACIÓN DE BASE DE DATOS
 // ============================================
 
-// Detectar entorno
-$env = getenv('ENVIRONMENT') ?: 'local';
+// Detectar entorno (producción por defecto)
+$env = getenv('ENVIRONMENT') ?: 'production';
 
 if ($env === 'production') {
     // Configuración para Railway (variables de entorno)
-    $db_host = getenv('DB_HOST');
-    $db_user = getenv('DB_USER');
-    $db_pass = getenv('DB_PASS');
-    $db_name = getenv('DB_NAME');
+    // Usa las variables estándar de Railway, con compatibilidad hacia atrás
+    $db_host = getenv('DB_HOST') ?: 'localhost';
+    $db_user = getenv('DB_USERNAME') ?: getenv('DB_USER') ?: 'root';
+    $db_pass = getenv('DB_PASSWORD') ?: getenv('DB_PASS') ?: '';
+    $db_name = getenv('DB_NAME') ?: 'railway';
+    $db_port = (int)getenv('DB_PORT') ?: 3306;
 } else {
     // Configuración local
     $db_host = 'localhost';
     $db_user = 'root';
     $db_pass = '';
     $db_name = 'estetica_victoria';
+    $db_port = 3306;
 }
 
-// Crear conexión
-$conexion = new mysqli($db_host, $db_user, $db_pass, $db_name);
+// Crear conexión con puerto
+$conexion = new mysqli($db_host, $db_user, $db_pass, $db_name, $db_port);
 
 // Verificar conexión
 if ($conexion->connect_error) {
