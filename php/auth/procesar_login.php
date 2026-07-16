@@ -3,8 +3,8 @@
 // PROCESAMIENTO DE LOGIN
 // ============================================
 
-require_once '../config/db.php';
-require_once '../auth/session.php';
+require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/session.php';
 
 // Si ya está autenticado, redirigir
 if (estaAutenticado()) {
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = 'Por favor complete todos los campos';
     } else {
         // Obtener conexión
-        $conexion = require '../config/db.php';
+        $conexion = require __DIR__ . '/../config/db.php';
         
         // Buscar usuario
         $stmt = $conexion->prepare('SELECT id, nombre, email, contraseña, tipo_usuario FROM usuarios WHERE email = ? AND estado = "activo"');
