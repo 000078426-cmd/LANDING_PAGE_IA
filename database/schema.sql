@@ -1,8 +1,4 @@
--- ============================================
--- SCRIPT DE BASE DE DATOS - ESTÉTICA VICTORIA
--- ============================================
 
--- Crear tabla de usuarios
 CREATE TABLE usuarios (
   id INT PRIMARY KEY AUTO_INCREMENT,
   nombre VARCHAR(100) NOT NULL,
