@@ -516,6 +516,8 @@
         const apiUrl = '../php/api';
         let usuarioEditando = null;
         let chart = null;
+        let rolUsuario = 'admin';
+        let datosUsuario = null;
 
         // Inicializar
         document.addEventListener('DOMContentLoaded', function () {
@@ -527,8 +529,8 @@
             });
 
             // Cargar datos iniciales
+            cargarRolUsuario();
             cargarResumen();
-            cargarUsuarios();
             cargarVentasDiarias();
 
             // Event listeners para tabs
@@ -539,6 +541,41 @@
                 });
             });
         });
+
+        function cargarRolUsuario() {
+            fetch(`${apiUrl}/usuario_sesion.php`)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.suceso && data.datos) {
+                        datosUsuario = data.datos;
+                        rolUsuario = data.datos.rol || 'admin';
+
+                        if (datosUsuario.nombre) {
+                            document.getElementById('userName').textContent = datosUsuario.nombre;
+                        }
+                        if (datosUsuario.email) {
+                            document.getElementById('userEmail').textContent = datosUsuario.email;
+                        }
+
+                        if (rolUsuario === 'user') {
+                            document.querySelector('.nav-link[data-tab="usuarios"]')?.style.setProperty('display', 'none');
+                            const usuariosTab = document.getElementById('usuarios');
+                            if (usuariosTab) {
+                                usuariosTab.style.display = 'none';
+                            }
+                            document.querySelector('.header h1').textContent = 'Dashboard Empleado';
+                            document.getElementById('userName').textContent = datosUsuario.nombre || 'Empleado';
+                            document.getElementById('userEmail').textContent = datosUsuario.email || '';
+                            document.getElementById('totalUsuarios').textContent = '—';
+                        } else {
+                            cargarUsuarios();
+                        }
+                    }
+                })
+                .catch(() => {
+                    rolUsuario = 'admin';
+                });
+        }
 
         function cambiarTab(tabName) {
             // Actualizar nav activo
@@ -577,14 +614,18 @@
                     }
                 });
 
-            // Total usuarios
-            fetch(`${apiUrl}/usuarios.php?accion=listar`)
-                .then(r => r.json())
-                .then(data => {
-                    if (data.suceso && data.datos) {
-                        document.getElementById('totalUsuarios').textContent = data.datos.length;
-                    }
-                });
+            // Total usuarios (solo visible para administradores)
+            if (rolUsuario === 'admin') {
+                fetch(`${apiUrl}/usuarios.php?accion=listar`)
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.suceso && data.datos) {
+                            document.getElementById('totalUsuarios').textContent = data.datos.length;
+                        }
+                    });
+            } else {
+                document.getElementById('totalUsuarios').textContent = '—';
+            }
 
             // Gráfico de últimas 7 días
             const hace7Dias = new Date();
@@ -710,6 +751,10 @@
 
         // USUARIOS
         function cargarUsuarios() {
+            if (rolUsuario !== 'admin') {
+                return;
+            }
+
             fetch(`${apiUrl}/usuarios.php?accion=listar`)
                 .then(r => r.json())
                 .then(data => {

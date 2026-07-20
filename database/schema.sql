@@ -71,6 +71,11 @@ INSERT INTO usuarios (nombre, email, contraseña, tipo_usuario) VALUES
 ('María García', 'maria.garcia@email.com', '$2y$10$eImiTXuWVxfaHNAVe8b/TO4r.zHzAb8J5LNSM3lToBy0EtW3qejva', 'user'),
 ('Carlos López', 'carlos.lopez@email.com', '$2y$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcg7b3XeKeUxWdeS86E36gBSstC', 'user');
 
+-- Insertar empleados de prueba
+INSERT INTO usuarios (nombre, email, contraseña, tipo_usuario, estado) VALUES
+('Ana García', 'ana.garcia@esteticavictoria.com', '$2y$10$S/kfzqA.A.r9ACVS5gVhk0cAGVXYoub6jP104DD9K/cd/WgJh0z1S', 'user', 'activo'),
+('Luis Ramírez', 'luis.ramirez@esteticavictoria.com', '$2y$10$M7dFJ/WqP2WB2YKd/Ti2TObQpiSKRYvzACL4PZL0..5lhLjyK3Nmm', 'user', 'activo');
+
 -- Insertar servicios
 INSERT INTO servicios (nombre, descripcion, precio) VALUES 
 ('Corte de cabello', 'Corte profesional adaptado a tu estilo', 150.00),
